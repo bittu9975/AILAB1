@@ -1,0 +1,43 @@
+// Family pl
+male(raj).
+male(khush).
+male(sid).
+male(atul).
+male(dev).
+female(hetal).
+female(neha).
+female(kajal).
+female(chetna).
+
+% relationships
+father(raj, khush).
+father(raj, sid).
+father(khush, atul).
+father(sid, dev).
+father(sid, chetna).
+
+mother(hetal, khush).
+mother(hetal, sid).
+mother(neha, atul).
+mother(kajal, dev).
+mother(kajal, chetna).
+
+wife(hetal, raj).
+wife(neha, khush).
+wife(kajal, sid).
+
+parent(raj, hetal, khush).
+parent(raj, hetal, sid).
+parent(khush, neha, atul).
+parent(sid, kajal, dev).
+parent(sid, kajal, chetna).
+
+% rules
+sister(X, Y) :- parent(A, B, X), parent(A, B, Y), female(X), X \== Y.
+brother(X, Y) :- parent(A, B, X), parent(A, B, Y), male(X), X \== Y.
+siblings(X, Y) :- parent(A, B, X), parent(A, B, Y), X \== Y.
+husband(X, Y) :- wife(Y, X).
+son(X, Y) :- father(Y, X); mother(Y, X), male(X).
+daughter(X, Y) :- father(Y, X); mother(Y, X), female(X).
+grandfather(X, Y) :- father(X, Z), father(Z, Y).
+grandmother(X, Y) :- mother(X, Z), father(Z, Y).
