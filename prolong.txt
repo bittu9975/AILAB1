@@ -1,0 +1,32 @@
+symptom(fever, flubug).
+symptom(cough, flubug).
+symptom(rash, measles).
+symptom(fever, measles).
+symptom(runny_nose, flubug).
+symptom(runny_nose, cold).
+symptom(sore_throat, cold).
+symptom(fever, influenza).
+symptom(headache, influenza).
+
+% Predicate to diagnose illness
+diagnose_illness(Symptoms) :-
+    findall(Illness, (member(Symptom, Symptoms), symptom(Symptom, Illness)), Diagnosis),
+    list_to_set(Diagnosis, UniqueDiagnosis), % Remove duplicate diagnoses
+    print_diagnosis(UniqueDiagnosis).
+
+% Predicate to print diagnosis
+print_diagnosis([]) :-
+    write('Unable to diagnose the illness based on provided symptoms.'), nl.
+print_diagnosis(Diagnosis) :-
+    write('The possible illnesses could be: '), nl,
+    print_list(Diagnosis).
+
+% Helper predicate to print a list
+print_list([]).
+print_list([H|T]) :-
+    write('- '), write(H), nl,
+    print_list(T).
+
+INPUT
+?- diagnose_illness([fever, cough])
+?- diagnose_illness([fever, runny_nose]).
