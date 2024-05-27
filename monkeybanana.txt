@@ -1,0 +1,41 @@
+% Initial state: monkey is at position (0,0), box is at position (1,0), banana is at position (2,0)
+initial_state([monkey(0,0), box(1,0), banana(2,0)]).
+
+% Final state: monkey is at position (2,0), box is at position (2,0), banana is at position (2,0)
+final_state([monkey(2,0), box(2,0), banana(2,0)]).
+
+% Define the possible moves
+move(state([monkey(X1,Y1), box(X2,Y2), banana(X3,Y3)]), state([monkey(X1,Y2), box(X2,Y3), banana(X3,Y3)])) :-
+    % Monkey can move horizontally or vertically
+    (X1 =:= X2; Y1 =:= Y2),
+    % Monkey and box are at the same position
+    (X1 =:= X2, Y1 =:= Y2),
+    % Monkey and banana are not at the same position
+    \+ (X1 =:= X3, Y1 =:= Y3).
+
+move(state([monkey(X1,Y1), box(X2,Y2), banana(X3,Y3)]), state([monkey(X2,Y1), box(X3,Y2), banana(X3,Y3)])) :-
+    % Monkey can move horizontally or vertically
+    (X1 =:= X2; Y1 =:= Y2),
+    % Monkey and box are not at the same position
+    \+ (X1 =:= X2, Y1 =:= Y2),
+    % Monkey and banana are not at the same position
+    \+ (X1 =:= X3, Y1 =:= Y3).
+
+% Define the goal state
+goal_state(State) :-
+    final_state(State).
+
+% Define a predicate to find a solution path
+path(State, []) :- 
+    goal_state(State).
+
+path(State1, [Move | Path]) :-
+    move(State1, State2),
+    path(State2, Path),
+    member(Move, Path).
+
+% Define the solve predicate to find a solution
+solve :-
+    initial_state(InitialState),
+    path(InitialState, Path),
+    writeln(Path).
